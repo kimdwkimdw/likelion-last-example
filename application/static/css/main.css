@@ -99,6 +99,13 @@ ul {
   font-size: 100%;
 }
 
+.log {
+  color: gray;
+  font-size: 70%;
+  margin: 5px;
+  text-align: center;
+}
+
 /* Messages */
 
 .chatArea {

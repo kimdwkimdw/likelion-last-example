@@ -25,6 +25,20 @@ def emit(action, data, broadcast=False):
         p['private'].trigger(action, data)
 
 
+@app.route('/api/start', methods=["POST"])
+def api_start():
+    data = request.form
+    username = data['username']
+
+    emit('user_joined', {
+        'username': username,
+    }, broadcast=True)
+
+    return jsonify({
+        'status': 0,
+    })
+
+
 @app.route('/api/call/<action_name>', methods=["POST"])
 def api_call(action_name):
     data = request.form
