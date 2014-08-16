@@ -10,6 +10,7 @@ Pusher.log = function(message) {
 $(function() {
     var pusher = new Pusher(PUSHER_KEY)
         testChannel =pusher.subscribe('test_channel'),
+        broadcast = pusher.subscribe('br'),
         $window = $(window),
         $messages = $('.messages'),
         $inputMessage = $('.inputMessage'),
@@ -40,7 +41,7 @@ $(function() {
         addChatMessage({'username':'이두희', 'message':'?????????ㅜㅜㅜㅜㅜㅜ'});
     },initial_delay + 2000)
     
-    testChannel.bind('echo', function(data) {
+    broadcast.bind('new_message', function(data) {
         data['username'] = "김동우";
         addChatMessage(data);
     });
@@ -87,7 +88,7 @@ $(function() {
         // if there is a non-empty message
         if (message) {
             $inputMessage.val('');
-            $.post('/api/echo', {"message":message});
+            $.post('/api/call/new_message', {"message":message});
         }
     }
 
