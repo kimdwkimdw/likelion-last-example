@@ -10,6 +10,7 @@ Pusher.log = function(message) {
 $(function() {
     var pusher = new Pusher(PUSHER_KEY)
         testChannel =pusher.subscribe('test_channel'),
+        $window = $(window),
         $messages = $('.messages'),
         $inputMessage = $('.inputMessage'),
         chatPage = $('.chat.page');
@@ -44,18 +45,6 @@ $(function() {
         addChatMessage(data);
     });
 
-    setTimeout(function () {
-        $.post('/api/echo', {"message":"Hello World!"});
-    },initial_delay +  4000)
-    setTimeout(function () {
-        $.post('/api/echo', {"message":"나는 치킨을 먹고싶어"});
-    },initial_delay +  5000)
-    setTimeout(function () {
-        $.post('/api/echo', {"message":"치킨은 언제 오는거야"});    
-    },initial_delay +  6000)
-    setTimeout(function () {
-        $.post('/api/echo', {"message":"두희형 치킨 사주세요ㅠㅠ"});
-    },initial_delay +  7000)
 
     function addChatMessage(data) {
         var $usernameDiv = $('<span class="username"></span>');
@@ -91,4 +80,21 @@ $(function() {
         var index = Math.abs(hash % 360);
         return "hsl(" + index + ", 77%, 60%)";
     }
+
+    function sendMessage () {
+        var message = $inputMessage.val().trim();
+
+        // if there is a non-empty message
+        if (message) {
+            $inputMessage.val('');
+            $.post('/api/echo', {"message":message});
+        }
+    }
+
+    $window.keydown(function(event) {
+        // When the client hits ENTER on their keyboard
+        if (event.which === 13) {
+            sendMessage();
+        }
+    });
 });
