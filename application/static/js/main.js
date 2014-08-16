@@ -8,14 +8,19 @@ Pusher.log = function(message) {
 */
 
 $(function() {
-    var pusher = new Pusher(PUSHER_KEY)
-        testChannel =pusher.subscribe('test_channel'),
+    var pusher = new Pusher(PUSHER_KEY),
+        testChannel = pusher.subscribe('test_channel'),
         broadcast = pusher.subscribe('br'),
         $window = $(window),
+        $usernameInput = $('.usernameInput[name=username]'),
         $messages = $('.messages'),
         $inputMessage = $('.inputMessage'),
-        chatPage = $('.chat.page');
+        $loginPage = $('.login.page'),
+        $chatPage = $('.chat.page');
 
+    var username;
+
+    $usernameInput.focus();
     /*
     //$.post는 아래의 형태와 같습니다.
     $.ajax({
@@ -27,22 +32,7 @@ $(function() {
     });
     */
 
-    var initial_delay = 1500;
-    setTimeout(function () {
-        addChatMessage({'username':'이두희', 'message':'안녕?'});
-    },initial_delay + 500)
-    setTimeout(function () {
-        addChatMessage({'username':'홍진호', 'message':'안녕?'});
-    },initial_delay + 1000)
-    setTimeout(function () {
-        addChatMessage({'username':'홍진호', 'message':'두희야 요즘 눈물 셀카 연습하고 있다매.'});
-    },initial_delay + 1500)
-    setTimeout(function () {
-        addChatMessage({'username':'이두희', 'message':'?????????ㅜㅜㅜㅜㅜㅜ'});
-    },initial_delay + 2000)
-    
     broadcast.bind('new_message', function(data) {
-        data['username'] = "김동우";
         addChatMessage(data);
     });
 
@@ -82,20 +72,40 @@ $(function() {
         return "hsl(" + index + ", 77%, 60%)";
     }
 
-    function sendMessage () {
+    function sendMessage() {
         var message = $inputMessage.val().trim();
 
         // if there is a non-empty message
         if (message) {
             $inputMessage.val('');
-            $.post('/api/call/new_message', {"message":message});
+            $.post('/api/call/new_message', {
+                "message": message,
+                "username": username
+            });
+        }
+    }
+
+    function setUsername() {
+        var __username = $usernameInput.val().trim();
+
+        // If the username is valid
+        if (__username) {
+            username = __username;
+            $loginPage.fadeOut();
+            $chatPage.show();
+            $inputMessage.focus();
         }
     }
 
     $window.keydown(function(event) {
         // When the client hits ENTER on their keyboard
         if (event.which === 13) {
-            sendMessage();
+            if (username) {
+                sendMessage();
+            } else {
+                setUsername();
+                $usernameInput.blur();
+            }
         }
     });
 });
