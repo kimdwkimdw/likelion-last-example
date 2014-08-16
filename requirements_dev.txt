@@ -1,0 +1,8 @@
+# Development environment pip requirements file
+# Install via 'pip install -r requirements_dev.txt'
+
+pusher==0.8
+flask-sqlalchemy==1.0
+flask-migrate==1.2.0
+flask-script==2.0.5
+werkzeug
