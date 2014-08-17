@@ -75,6 +75,7 @@ def api_trylogin():
 
     session['username'] = username
     session['user_id'] = user_id
+    mark_online(username)
 
     emit('user_joined', {
         'username': username,
@@ -83,6 +84,7 @@ def api_trylogin():
 
     return jsonify({
         'status': 0,
+        'user_list': get_current_users(),
     })
 
 

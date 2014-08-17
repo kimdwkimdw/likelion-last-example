@@ -178,6 +178,8 @@ $(function() {
                         // Display the welcome message
                         var message = "Welcome to Chat &mdash; ";
                         log(message);
+
+                        updateUserList(data.user_list)
                     } else {
                         alert("로그인에 실패했어요");
                     }
