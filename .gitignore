@@ -56,3 +56,4 @@ application.cfg
 secret_keys.py
 user_info.py
 pusher_key.js
+migrations

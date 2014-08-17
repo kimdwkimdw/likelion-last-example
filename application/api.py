@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
 from pusher import Pusher
-from application import app
-from flask import request, jsonify, session
+from application import app, db
+from flask import request, jsonify, session, g
 from user_info import PUSHER_APP_ID, PUSHER_KEY, PUSHER_SECRET
+from werkzeug.security import generate_password_hash, \
+    check_password_hash
+from models import (
+    User
+)
+from functools import wraps
 
 p = Pusher(
     app_id=PUSHER_APP_ID,
