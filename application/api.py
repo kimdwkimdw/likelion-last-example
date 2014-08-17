@@ -9,12 +9,33 @@ from models import (
     User
 )
 from functools import wraps
+import time
 
 p = Pusher(
     app_id=PUSHER_APP_ID,
     key=PUSHER_KEY,
     secret=PUSHER_SECRET,
 )
+
+current_user = {}
+
+
+def mark_online(username):
+    now = int(time.time())
+    current_user[username] = now
+
+
+def expiring_users():
+    now = int(time.time())
+    for key in current_user.keys():
+        if now - current_user[key] > 10:
+            current_user.pop(key)
+
+
+def get_current_users():
+    expiring_users()
+
+    return list(current_user)
 
 
 @app.route('/api/echo', methods=["GET", "POST"])
@@ -57,6 +78,7 @@ def api_trylogin():
 
     emit('user_joined', {
         'username': username,
+        'user_list': get_current_users(),
     }, broadcast=True)
 
     return jsonify({
@@ -68,6 +90,7 @@ def api_trylogin():
 def app_before_request():
     g.user = None
     if 'username' in session:
+        mark_online(session['username'])
         g.user = session['username']
 
 

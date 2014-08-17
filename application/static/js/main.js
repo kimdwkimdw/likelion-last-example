@@ -86,6 +86,7 @@ $(function() {
 
         broadcast.bind('user_joined', function(data) {
             log(data.username + ' joined');
+            updateUserList(data.user_list);
         });
 
         broadcast.bind('typing', function(data) {
@@ -225,6 +226,16 @@ $(function() {
                 }
             }, TYPING_TIMER_LENGTH);
         }
+    }
+
+    function updateUserList(user_list) {
+        var $user_list = $("ul.users");
+        $user_list.html("");
+        for (var idx in user_list) 
+        {
+            $user_list.append($("<li>"+user_list[idx]+"</li>"))
+        }
+        
     }
 
     $window.keydown(function(event) {

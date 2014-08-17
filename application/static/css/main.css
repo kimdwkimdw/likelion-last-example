@@ -96,11 +96,12 @@ ul {
   padding-bottom: 60px;
   position: fixed;
   right: 0;
-  width: 100px;
+  width: 150px;
 }
 
 .user-area > ul {
   padding: 10px;
+  list-style: initial;
 }
 
 /* Font */
@@ -125,7 +126,7 @@ ul {
 .chatArea {
   height: 100%;
   padding-bottom: 60px;
-  right: 100px;
+  right: 150px;
   position: fixed;
   left: 0;
 }
