@@ -10,6 +10,7 @@ Pusher.log = function(message) {
 $(function() {
     var $window = $(window),
         $usernameInput = $('.usernameInput[name=username]'),
+        $passwordInput = $('.usernameInput[name=password]'),
         $messages = $('.messages'),
         $inputMessage = $('.inputMessage'),
         $loginPage = $('.login.page'),
@@ -124,11 +125,13 @@ $(function() {
 
     function setUsername() {
         var __username = $usernameInput.val().trim();
+        var __password = $passwordInput.val().trim();
 
         // If the username is valid
-        if (__username) {
-            $.post("/api/start", {
+        if (__username && __password) {
+            $.post("/api/trylogin", {
                     'username': __username,
+                    'password': __password,
                     'user_id': user_id,
                 },
                 function(data) {
@@ -144,7 +147,7 @@ $(function() {
                         var message = "Welcome to Chat &mdash; ";
                         log(message);
                     } else {
-                        alert("error");
+                        alert("로그인에 실패했어요");
                     }
                 }, "json"
             );
